@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solve Quadratic Equation</title>
+</head>
+<body>
+    <h1>Quadratic Equation Solver: ax² + bx + c = 0</h1>
+    <script>
+        // 步骤1：三次调用prompt获取系数a、b、c
+        let aStr = prompt("请输入二次项系数 a (a > 0):");
+        let bStr = prompt("请输入一次项系数 b:");
+        let cStr = prompt("请输入常数项 c:");
+
+        // 步骤2：使用parseFloat转换为数字
+        let a = parseFloat(aStr);
+        let b = parseFloat(bStr);
+        let c = parseFloat(cStr);
+
+        // 步骤3：计算判别式delta
+        let delta = b * b - 4 * a * c;
+
+        // 步骤4：计算两个根x1、x2（题目假设delta >= 0, a > 0）
+        let x1 = (-b + Math.sqrt(delta)) / (2 * a);
+        let x2 = (-b - Math.sqrt(delta)) / (2 * a);
+
+        // 步骤5：用alert展示结果
+        alert(`方程的两个根为：\nx1 = ${x1.toFixed(4)}\nx2 = ${x2.toFixed(4)}`);
+
+        // 步骤6：用console.log输出结果（可在浏览器开发者工具控制台查看）
+        console.log("二次项系数 a =", a);
+        console.log("一次项系数 b =", b);
+        console.log("常数项 c =", c);
+        console.log("判别式 delta =", delta);
+        console.log("方程的根 x1 =", x1);
+        console.log("方程的根 x2 =", x2);
+    </script>
+</body>
+</html>
