@@ -2,38 +2,179 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Solve Quadratic Equation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tower of Hanoi 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .controls label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-right: 10px;
+        }
+
+        .controls input {
+            width: 80px;
+            padding: 5px;
+            font-size: 16px;
+            border: 2px solid #cbd5e0;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .controls button {
+            padding: 6px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: background 0.2s;
+        }
+
+        #resetBtn {
+            background: #4299e1;
+            color: white;
+        }
+
+        #solveBtn {
+            background: #48bb78;
+            color: white;
+        }
+
+        #resetBtn:hover { background: #3182ce; }
+        #solveBtn:hover { background: #38a169; }
+
+        .game-board {
+            perspective: 1000px;
+            display: flex;
+            gap: 80px;
+            padding: 20px;
+        }
+
+        .peg {
+            width: 20px;
+            height: 200px;
+            background: #2d3748;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .disk {
+            height: 25px;
+            border-radius: 5px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+
+        .disk:active {
+            cursor: grabbing;
+        }
+
+        .peg-base {
+            position: absolute;
+            bottom: -10px;
+            width: 120px;
+            height: 15px;
+            background: #2d3748;
+            border-radius: 5px;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #e53e3e;
+        }
+
+        #moveCount {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #2d3748;
+        }
+    </style>
 </head>
 <body>
-    <h1>Quadratic Equation Solver: ax² + bx + c = 0</h1>
+    <h1>🏰 Tower of Hanoi 3D</h1>
+    <div class="controls">
+        <label for="diskCount">Number of disks (3-8):</label>
+        <input type="number" id="diskCount" min="3" max="8" value="3">
+        <button id="resetBtn">Reset Game</button>
+        <button id="solveBtn">Auto Solve</button>
+    </div>
+
+    <div class="game-board" id="gameBoard">
+        <div class="peg" id="pegA" data-name="A"></div>
+        <div class="peg" id="pegB" data-name="B"></div>
+        <div class="peg" id="pegC" data-name="C"></div>
+    </div>
+
+    <div id="message"></div>
+    <div id="moveCount">Moves: 0</div>
+
     <script>
-        // 步骤1：三次调用prompt获取系数a、b、c
-        let aStr = prompt("请输入二次项系数 a (a > 0):");
-        let bStr = prompt("请输入一次项系数 b:");
-        let cStr = prompt("请输入常数项 c:");
+        // 游戏状态
+        let diskCount = 3;
+        let pegs = { A: [], B: [], C: [] };
+        let moveCount = 0;
+        let solving = false;
 
-        // 步骤2：使用parseFloat转换为数字
-        let a = parseFloat(aStr);
-        let b = parseFloat(bStr);
-        let c = parseFloat(cStr);
+        const colors = ['#f56565', '#ed8936', '#ecc94b', '#48bb78', '#38b2ac', '#4299e1', '#667eea', '#ed64a6'];
+        const diskInput = document.getElementById('diskCount');
+        const resetBtn = document.getElementById('resetBtn');
+        const solveBtn = document.getElementById('solveBtn');
+        const messageEl = document.getElementById('message');
+        const moveCountEl = document.getElementById('moveCount');
+        const pegsEls = {
+            A: document.getElementById('pegA'),
+            B: document.getElementById('pegB'),
+            C: document.getElementById('pegC')
+        };
 
-        // 步骤3：计算判别式delta
-        let delta = b * b - 4 * a * c;
+        // 初始化游戏
+        function initGame() {
+            // 重置状态
+            pegs = { A: [], B: [], C: [] };
+            moveCount = 0;
+            solving = false;
+            messageEl.textContent = '';
+            moveCountEl.textContent = `Moves: 0`;
 
-        // 步骤4：计算两个根x1、x2（题目假设delta >= 0, a > 0）
-        let x1 = (-b + Math.sqrt(delta)) / (2 * a);
-        let x2 = (-b - Math.sqrt(delta)) / (2 * a);
+            // 清空DOM
+            Object.values(pegsEls).forEach(el => el.innerHTML = '');
 
-        // 步骤5：用alert展示结果
-        alert(`方程的两个根为：\nx1 = ${x1.toFixed(4)}\nx2 = ${x2.toFixed(4)}`);
-
-        // 步骤6：用console.log输出结果（可在浏览器开发者工具控制台查看）
-        console.log("二次项系数 a =", a);
-        console.log("一次项系数 b =", b);
-        console.log("常数项 c =", c);
-        console.log("判别式 delta =", delta);
-        console.log("方程的根 x1 =", x1);
-        console.log("方程的根 x2 =", x2);
-    </script>
-</body>
-</html>
+            // 创建圆盘（从大到小）
+            for (let i = diskCount; i >= 1; i--) {
+                const disk = document.createElement('div');
+                disk.classList.add('disk');
+                disk.dataset.size = i;
+                disk.style.width = `${i * 25}px`;
+                disk.style.backgroundColor = colors[i - 1];
+                disk.addEventListener('click', () => handleDiskClick(disk));
+                pegsEls.A.appendChild(disk);
+          
