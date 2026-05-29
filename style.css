@@ -1,3 +1,4 @@
+/* 全局样式重置 */
 * {
     margin: 0;
     padding: 0;
@@ -5,6 +6,7 @@
     font-family: Arial, sans-serif;
 }
 
+/* 页面背景 */
 body {
     background: linear-gradient(to bottom, #87CEEB, #E6E6FA);
     min-height: 100vh;
@@ -14,17 +16,20 @@ body {
     padding: 20px;
 }
 
+/* 主容器 */
 .container {
     text-align: center;
     width: 100%;
     max-width: 900px;
 }
 
+/* 标题样式 */
 h1 {
     color: #333;
     margin-bottom: 20px;
 }
 
+/* 控制栏布局 */
 .controls {
     display: flex;
     justify-content: center;
@@ -40,14 +45,16 @@ h1 {
     gap: 8px;
 }
 
+/* 按钮样式 */
 button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     background-color: #4CAF50;
-    color: #fff;
+    color: white;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.2s;
 }
 
 button:disabled {
@@ -55,30 +62,41 @@ button:disabled {
     cursor: not-allowed;
 }
 
+button:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+/* 警告提示 */
 .warning {
-    background: #ffdddd;
+    background-color: #ffdddd;
     color: #d8000c;
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 15px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
 .warning.hidden {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
+/* 游戏区域布局 */
 .tower-container {
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
     height: 350px;
+    perspective: 1000px;
     margin-top: 30px;
 }
 
+/* 柱子样式 */
 .peg {
     width: 20px;
     height: 300px;
-    background: #8B4513;
+    background: linear-gradient(to right, #8B4513, #A0522D, #8B4513);
     border-radius: 10px 10px 0 0;
     display: flex;
     flex-direction: column-reverse;
@@ -87,32 +105,40 @@ button:disabled {
 }
 
 .peg::before {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -10px;
     width: 80px;
     height: 10px;
-    background: #8B4513;
+    background: linear-gradient(to bottom, #A0522D, #8B4513);
     border-radius: 5px;
 }
 
+/* 圆盘基础样式 */
 .disk {
     height: 25px;
     border-radius: 5px;
     margin: 2px 0;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
 }
 
-.disk-1 { width: 60px; background: #ff6b6b; }
-.disk-2 { width: 80px; background: #ffca3a; }
-.disk-3 { width: 100px; background: #8ac926; }
-.disk-4 { width: 120px; background: #1982c4; }
-.disk-5 { width: 140px; background: #6a4c93; }
-.disk-6 { width: 160px; background: #ff9f1c; }
-.disk-7 { width: 170px; background: #e63946; }
-.disk-8 { width: 180px; background: #2a9d8f; }
+.disk:hover {
+    transform: translateY(-5px);
+}
 
+/* 不同大小圆盘的颜色和宽度 */
+.disk-1 { width: 60px; background: linear-gradient(to bottom, #ff6b6b, #ee5a5a); }
+.disk-2 { width: 80px; background: linear-gradient(to bottom, #ffca3a, #f9c00c); }
+.disk-3 { width: 100px; background: linear-gradient(to bottom, #8ac926, #6fbc23); }
+.disk-4 { width: 120px; background: linear-gradient(to bottom, #1982c4, #1268a0); }
+.disk-5 { width: 140px; background: linear-gradient(to bottom, #6a4c93, #553d7a); }
+.disk-6 { width: 160px; background: linear-gradient(to bottom, #ff9f1c, #e68900); }
+.disk-7 { width: 170px; background: linear-gradient(to bottom, #e63946, #d62828); }
+.disk-8 { width: 180px; background: linear-gradient(to bottom, #2a9d8f, #21867a); }
+
+/* 胜利弹窗 */
 .victory-modal {
     position: fixed;
     top: 0;
@@ -131,8 +157,27 @@ button:disabled {
 }
 
 .modal-content {
-    background: #fff;
+    background: white;
     padding: 30px;
     border-radius: 10px;
     text-align: center;
+    animation: glowWin 1s infinite alternate;
+}
+
+@keyframes glowWin {
+    from { box-shadow: 0 0 10px #ffd700; }
+    to { box-shadow: 0 0 30px #ffd700, 0 0 50px #ffd700; }
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    .tower-container {
+        height: 250px;
+    }
+    .peg {
+        height: 200px;
+    }
+    .disk {
+        height: 20px;
+    }
 }
