@@ -2,7 +2,7 @@ class HanoiGame {
     constructor() {
         this.gameState = {
             disksCount: 5,
-            pegs: [[], [], []], // A, B, C
+            pegs: [[], [], []],
             moves: 0,
             isAutoSolving: false,
             selectedPegIndex: null
@@ -54,7 +54,6 @@ class HanoiGame {
         this.gameState.selectedPegIndex = null;
         this.gameState.pegs = [[], [], []];
 
-        // Initialize disks on peg A (index 0)
         for (let i = this.gameState.disksCount; i >= 1; i--) {
             this.gameState.pegs[0].push(i);
         }
@@ -66,10 +65,8 @@ class HanoiGame {
     }
 
     render() {
-        // Clear all pegs
         this.pegsEls.forEach(pegEl => pegEl.innerHTML = '');
 
-        // Render disks
         this.gameState.pegs.forEach((stack, pegIndex) => {
             stack.forEach(diskSize => {
                 const diskEl = document.createElement('div');
@@ -85,13 +82,11 @@ class HanoiGame {
         if (this.gameState.isAutoSolving) return;
 
         if (this.gameState.selectedPegIndex === null) {
-            // Select the top disk of the clicked peg
             if (this.gameState.pegs[pegIndex].length > 0) {
                 this.gameState.selectedPegIndex = pegIndex;
                 this.pegsEls[pegIndex].lastChild.style.transform = 'translateY(-10px)';
             }
         } else {
-            // Attempt to move the selected disk to the clicked peg
             const fromIndex = this.gameState.selectedPegIndex;
             const toIndex = pegIndex;
 
@@ -103,7 +98,6 @@ class HanoiGame {
                 }
             }
 
-            // Deselect
             if (this.gameState.pegs[fromIndex].length > 0) {
                 this.pegsEls[fromIndex].lastChild.style.transform = '';
             }
@@ -147,3 +141,13 @@ class HanoiGame {
 
     hideWarning() {
         this.warningEl.classList.add('hidden');
+        this.warningEl.classList.remove('show');
+    }
+
+    showVictory() {
+        this.finalMovesEl.textContent = this.gameState.moves;
+        this.victoryModal.classList.remove('hidden');
+    }
+
+    updateMoveCount() {
+        this.moveCountEl.textContent =
