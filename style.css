@@ -118,7 +118,7 @@ button:hover:not(:disabled) {
     transform: translateY(-5px);
 }
 
-/* 圆盘颜色 */
+/* 圆盘颜色和宽度 */
 .disk-1 { width: 60px; background: linear-gradient(to bottom, #ff6b6b, #ee5a5a); }
 .disk-2 { width: 80px; background: linear-gradient(to bottom, #ffca3a, #f9c00c); }
 .disk-3 { width: 100px; background: linear-gradient(to bottom, #8ac926, #6fbc23); }
@@ -128,7 +128,6 @@ button:hover:not(:disabled) {
 .disk-7 { width: 170px; background: linear-gradient(to bottom, #e63946, #d62828); }
 .disk-8 { width: 180px; background: linear-gradient(to bottom, #2a9d8f, #21867a); }
 
-/* 动画 */
 @keyframes shakeWarning {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
@@ -179,4 +178,5 @@ button:hover:not(:disabled) {
     .disk {
         height: 20px;
     }
+}
 }
