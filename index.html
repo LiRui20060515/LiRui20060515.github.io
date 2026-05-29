@@ -4,42 +4,176 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tower of Hanoi 3D</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>🏰 Tower of Hanoi (3D)</h1>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
 
-        <div class="controls">
-            <div class="control-group">
-                <label for="diskCount">Number of disks (3-8):</label>
-                <input type="number" id="diskCount" min="3" max="8" value="5">
-            </div>
-            <div class="control-group">
-                <p>Moves: <span id="moveCount">0</span></p >
-            </div>
-            <button id="resetBtn">Reset</button>
-            <button id="autoSolveBtn">Auto Solve</button>
-        </div>
+        body {
+            background: linear-gradient(to bottom, #87CEEB, #E6E6FA);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
-        <div id="warning" class="warning hidden">⚠️ Cannot place larger disk on smaller disk!</div>
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+        }
 
-        <div class="tower-container">
-            <div class="peg" id="pegA" data-peg="A"></div>
-            <div class="peg" id="pegB" data-peg="B"></div>
-            <div class="peg" id="pegC" data-peg="C"></div>
-        </div>
-    </div>
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-    <div class="victory-modal hidden" id="victoryModal">
-        <div class="modal-content">
-            <h2>🎉 Victory!</h2>
-            <p>You solved the puzzle in <span id="finalMoves">0</span> moves!</p >
-            <button id="playAgainBtn">Play Again</button>
-        </div>
-    </div>
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
 
-    <!-- 必须保留这一行，否则JS不会执行 -->
-    <script src="script.js"></script>
-</body>
-</html>
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+
+        .warning {
+            background-color: #ffdddd;
+            color: #d8000c;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .warning.hidden {
+            opacity: 0;
+        }
+
+        .tower-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 350px;
+            perspective: 1000px;
+            margin-top: 30px;
+        }
+
+        .peg {
+            width: 20px;
+            height: 300px;
+            background: linear-gradient(to right, #8B4513, #A0522D, #8B4513);
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .peg::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            width: 80px;
+            height: 10px;
+            background: linear-gradient(to bottom, #A0522D, #8B4513);
+            border-radius: 5px;
+        }
+
+        .disk {
+            height: 25px;
+            border-radius: 5px;
+            margin: 2px 0;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .disk:hover {
+            transform: translateY(-5px);
+        }
+
+        .disk-1 { width: 60px; background: linear-gradient(to bottom, #ff6b6b, #ee5a5a); }
+        .disk-2 { width: 80px; background: linear-gradient(to bottom, #ffca3a, #f9c00c); }
+        .disk-3 { width: 100px; background: linear-gradient(to bottom, #8ac926, #6fbc23); }
+        .disk-4 { width: 120px; background: linear-gradient(to bottom, #1982c4, #1268a0); }
+        .disk-5 { width: 140px; background: linear-gradient(to bottom, #6a4c93, #553d7a); }
+        .disk-6 { width: 160px; background: linear-gradient(to bottom, #ff9f1c, #e68900); }
+        .disk-7 { width: 170px; background: linear-gradient(to bottom, #e63946, #d62828); }
+        .disk-8 { width: 180px; background: linear-gradient(to bottom, #2a9d8f, #21867a); }
+
+        @keyframes shakeWarning {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes glowWin {
+            0%, 100% { box-shadow: 0 0 10px #ffd700; }
+            50% { box-shadow: 0 0 30px #ffd700, 0 0 50px #ffd700; }
+        }
+
+        .warning.show {
+            animation: shakeWarning 0.3s ease-in-out 3;
+        }
+
+        .victory-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .victory-modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            animation: glowWin 1s infinite alternate;
+        }
+
+        @media (max-width: 768px) {
+            .tower-container {
+                height: 250p
