@@ -54,6 +54,7 @@ class HanoiGame {
         this.gameState.selectedPegIndex = null;
         this.gameState.pegs = [[], [], []];
 
+        // 初始化圆盘到A柱
         for (let i = this.gameState.disksCount; i >= 1; i--) {
             this.gameState.pegs[0].push(i);
         }
@@ -65,8 +66,10 @@ class HanoiGame {
     }
 
     render() {
+        // 清空所有柱子
         this.pegsEls.forEach(pegEl => pegEl.innerHTML = '');
 
+        // 渲染圆盘
         this.gameState.pegs.forEach((stack, pegIndex) => {
             stack.forEach(diskSize => {
                 const diskEl = document.createElement('div');
@@ -82,11 +85,13 @@ class HanoiGame {
         if (this.gameState.isAutoSolving) return;
 
         if (this.gameState.selectedPegIndex === null) {
+            // 选中柱子顶部的圆盘
             if (this.gameState.pegs[pegIndex].length > 0) {
                 this.gameState.selectedPegIndex = pegIndex;
                 this.pegsEls[pegIndex].lastChild.style.transform = 'translateY(-10px)';
             }
         } else {
+            // 尝试移动圆盘
             const fromIndex = this.gameState.selectedPegIndex;
             const toIndex = pegIndex;
 
@@ -98,6 +103,7 @@ class HanoiGame {
                 }
             }
 
+            // 取消选中
             if (this.gameState.pegs[fromIndex].length > 0) {
                 this.pegsEls[fromIndex].lastChild.style.transform = '';
             }
@@ -146,8 +152,4 @@ class HanoiGame {
 
     showVictory() {
         this.finalMovesEl.textContent = this.gameState.moves;
-        this.victoryModal.classList.remove('hidden');
-    }
-
-    updateMoveCount() {
-        this.moveCountEl.textContent =
+   
