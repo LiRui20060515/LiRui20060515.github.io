@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #87CEEB, #E6E6FA);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 900px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.warning {
+    background: #ffdddd;
+    color: #d8000c;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.warning.hidden {
+    display: none;
+}
+
+.tower-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 350px;
+    margin-top: 30px;
+}
+
+.peg {
+    width: 20px;
+    height: 300px;
+    background: #8B4513;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    position: relative;
+}
+
+.peg::before {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    width: 80px;
+    height: 10px;
+    background: #8B4513;
+    border-radius: 5px;
+}
+
+.disk {
+    height: 25px;
+    border-radius: 5px;
+    margin: 2px 0;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.disk-1 { width: 60px; background: #ff6b6b; }
+.disk-2 { width: 80px; background: #ffca3a; }
+.disk-3 { width: 100px; background: #8ac926; }
+.disk-4 { width: 120px; background: #1982c4; }
+.disk-5 { width: 140px; background: #6a4c93; }
+.disk-6 { width: 160px; background: #ff9f1c; }
+.disk-7 { width: 170px; background: #e63946; }
+.disk-8 { width: 180px; background: #2a9d8f; }
+
+.victory-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.victory-modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
