@@ -1,43 +1,50 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>汉诺塔</title>
-    <link rel="stylesheet" href="style.css">
+    <title>3D Gradient Cube Animation</title>
+    <style>
+        .scene {
+            width: 200px;
+            height: 200px;
+            margin: 100px auto;
+            perspective: 1000px;
+        }
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 8s linear infinite;
+        }
+        @keyframes rotateCube {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+        .face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            opacity: 0.8;
+        }
+        .front  { background: linear-gradient(45deg, #ff9a9e, #fad0c4); transform: translateZ(100px); }
+        .back   { background: linear-gradient(45deg, #a18cd1, #fbc2eb); transform: rotateY(180deg) translateZ(100px); }
+        .right  { background: linear-gradient(45deg, #84fab0, #8fd3f4); transform: rotateY(90deg) translateZ(100px) skewX(10deg); }
+        .left   { background: linear-gradient(45deg, #fa709a, #fee140); transform: rotateY(-90deg) translateZ(100px) skewX(-10deg); }
+        .top    { background: linear-gradient(45deg, #667eea, #764ba2); transform: rotateX(90deg) translateZ(100px) skewY(10deg); }
+        .bottom { background: linear-gradient(45deg, #f093fb, #f5576c); transform: rotateX(-90deg) translateZ(100px) skewY(-10deg); }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🏰 汉诺塔</h1>
-        <div class="controls">
-            <div class="control-group">
-                <label for="diskCount">圆盘数量(3-8)：</label>
-                <input type="number" id="diskCount" min="3" max="8" value="5">
-            </div>
-            <div class="control-group">
-                <p>步数：<span id="moveCount">0</span></p >
-            </div>
-            <button id="resetBtn">重置</button>
-            <button id="autoSolveBtn">自动演示</button>
-        </div>
-
-        <div id="warning" class="warning hidden">⚠️ 不能将大圆盘放在小圆盘上！</div>
-
-        <div class="tower-container">
-            <div class="peg" id="pegA"></div>
-            <div class="peg" id="pegB"></div>
-            <div class="peg" id="pegC"></div>
+    <div class="scene">
+        <div class="cube">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
         </div>
     </div>
-
-    <div class="victory-modal hidden" id="victoryModal">
-        <div class="modal-content">
-            <h2>🎉 闯关成功！</h2>
-            <p>总步数：<span id="finalMoves">0</span></p >
-            <button id="playAgainBtn">再来一局</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
